@@ -48,6 +48,8 @@ function switchTab(id) {
 }
 
 function addTestCase(input = "", expected = "") {
+  if (typeof input !== "string") input = "";
+  if (typeof expected !== "string") expected = "";
   const container = document.getElementById("test-cases");
   const div = document.createElement("div");
   const testCaseCount = container.children.length + 1;
