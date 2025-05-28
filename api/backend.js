@@ -20,7 +20,7 @@ async function compileCode(code, testCases) {
 
       finalOutput += `🧪 Test Case ${
         i + 1
-      }:\n\nInput:\n${input}\nExpected:\n${expected}\nActual:\n${actual}\nResult: <span class="${statusClass}">${resultText}</span>\n-------------------------------------------------------\n`;
+      }:\n\nInput:\n${input}\nExpected:\n${expected}\n\nActual:\n${actual}\nResult: <span class="${statusClass}">${resultText}</span>\n-------------------------------------------------------\n`;
     } catch (err) {
       finalOutput += `❌ Test Case ${i + 1}:
       Error: ${err.message}
