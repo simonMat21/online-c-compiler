@@ -29,16 +29,6 @@ header {
   text-align: left;
 }
 
-header button {
-  padding: 8px 16px;
-  font-size: 14px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
 header button:hover {
   background-color: #2980b9;
 }
@@ -54,6 +44,26 @@ main {
   width: 100%;
 }
 
+#runBtn {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#addTestCaseBtn {
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 #editor-container {
   min-width: 300px;
   width: 50%;
@@ -66,15 +76,21 @@ main {
 }
 
 #editor-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: #ecf0f1;
   padding: 10px;
   font-weight: bold;
   text-align: left;
   border-radius: 12px 0 0 0;
 }
+#editor-label button {
+  margin-left: 10px;
+}
 
 #editor {
-  flex: 1;
+  /* flex: 1; */
   height: 100%;
 }
 
@@ -96,14 +112,16 @@ main {
 
 #tabs {
   display: flex;
+  align-items: center;
   background-color: #ecf0f1;
   border-bottom: 1px solid #ccc;
   border-radius: 0 12px 0 0;
+  gap: 8px;
 }
 
 #tabs button {
   flex: 1;
-  padding: 10px;
+  padding: 20px;
   background: none;
   border: none;
   cursor: pointer;
@@ -227,4 +245,47 @@ footer {
 footer a {
   color: #3498db;
   text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    height: auto;
+    overflow: auto;
+  }
+
+  main {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  #resizable-wrapper {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  #editor-container {
+    width: 100%;
+    height: auto;
+    min-height: 250px;
+    border-right: none;
+    border-radius: 12px 12px 0 0;
+  }
+
+  #editor {
+    height: 300px; /* Force reasonable height */
+  }
+
+  #side-panel {
+    width: 100%;
+    height: auto;
+    min-height: 250px;
+    border-radius: 0 0 12px 12px;
+  }
+
+  #resizer {
+    display: none;
+  }
 }

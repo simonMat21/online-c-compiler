@@ -8,6 +8,14 @@ require(["vs/editor/editor.main"], function () {
     theme: "vs-dark",
     fontSize: 14,
     automaticLayout: true,
+    scrollBeyondLastLine: false,
+    scrollbar: {
+      useShadows: false,
+      verticalScrollbarSize: 10,
+      horizontalScrollbarSize: 10,
+      handleMouseWheel: true, // ✅ Important
+      alwaysConsumeMouseWheel: false, // ✅ This allows scroll to bubble to page
+    },
   });
 });
 

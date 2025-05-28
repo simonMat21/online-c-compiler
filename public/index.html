@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>C Compiler API Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online C Compiler</title>
     <link rel="stylesheet" href="style.css" />
   </head>
 
@@ -12,17 +13,20 @@
       <h2>It may take a while in the start</h2>
     </div>
     <header>
-      <h1>C Compiler API Demo</h1>
+      <h1>Online C Compiler</h1>
       <div>
-        <button id="addTestCaseBtn">➕ Add Test Case</button>
-        <button id="runBtn">▶ Run Code</button>
+        <!-- <button id="addTestCaseBtn">➕ Add Test Case</button> -->
+        <!-- <button id="runBtn">▶ Run Code</button> -->
       </div>
     </header>
 
     <main>
       <div id="resizable-wrapper">
         <div id="editor-container">
-          <div id="editor-label">Editor</div>
+          <div id="editor-label">
+            Editor
+            <button id="runBtn">▶ Run Code</button>
+          </div>
           <div id="editor"></div>
         </div>
         <div id="resizer"></div>
@@ -37,11 +41,10 @@
             </button>
             <button id="outputBtn" data-tab="output-section">Output</button>
           </div>
-
           <div id="test-cases-section" class="active">
             <div id="test-cases"></div>
+            <button id="addTestCaseBtn">➕ Add Test Case</button>
           </div>
-
           <div id="output-section">
             <label>
               <input type="checkbox" id="subscribeCheckbox" />
