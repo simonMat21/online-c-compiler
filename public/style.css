@@ -203,6 +203,7 @@ textarea {
   align-items: center;
   font-size: 24px;
   z-index: 999;
+  flex-direction: column;
 }
 
 .result-passed {

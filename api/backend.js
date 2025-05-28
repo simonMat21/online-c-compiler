@@ -5,14 +5,11 @@ async function compileCode(code, testCases) {
     const { input, expected, element } = testCases[i];
 
     try {
-      const response = await fetch(
-        "https://jag21-online-c-compiler-api.onrender.com/compile",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code, input }),
-        }
-      );
+      const response = await fetch(process.env.COMPILER_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, input }),
+      });
 
       const result = await response.json();
       const actual = result.output || result.error || "No output";
@@ -48,8 +45,6 @@ export default async function handler(req, res) {
 
   // Dummy example: just echo back
   res.status(200).json({
-    message: "Email sent!",
-    keyUsed: compiler_api,
     output: output,
     resultList: resultList,
   });
