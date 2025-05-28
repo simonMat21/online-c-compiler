@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>C Compiler API Demo</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div id="loading-overlay">⏳ Compiling your code...</div>
+    <header>
+      <h1>C Compiler API Demo</h1>
+      <div>
+        <button id="addTestCaseBtn">➕ Add Test Case</button>
+        <button id="runBtn">▶ Run Code</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="resizable-wrapper">
+        <div id="editor-container">
+          <div id="editor-label">Editor</div>
+          <div id="editor"></div>
+        </div>
+        <div id="resizer"></div>
+        <div id="side-panel">
+          <div id="tabs">
+            <button
+              id="testClassBtn"
+              class="active"
+              data-tab="test-cases-section"
+            >
+              Test Cases
+            </button>
+            <button id="outputBtn" data-tab="output-section">Output</button>
+          </div>
+
+          <div id="test-cases-section" class="active">
+            <div id="test-cases"></div>
+          </div>
+
+          <div id="output-section">
+            <label>
+              <input type="checkbox" id="subscribeCheckbox" />
+              should output include input value
+            </label>
+            <pre id="output">Output will appear here...</pre>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div>
+        Built by <strong>Justaguy.21</strong> •
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSczoB5belTBxoNnV5wXVXfHkgwBhhRTLvfPqzBul1TwdpH61A/viewform?usp=dialog"
+          >Report an Issue</a
+        >
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
