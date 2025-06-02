@@ -13,15 +13,54 @@ require(["vs/editor/editor.main"], function () {
       useShadows: false,
       verticalScrollbarSize: 10,
       horizontalScrollbarSize: 10,
-      handleMouseWheel: true, // ✅ Important
-      alwaysConsumeMouseWheel: false, // ✅ This allows scroll to bubble to page
+      handleMouseWheel: true,
+      alwaysConsumeMouseWheel: false,
     },
   });
+
+  // ✅ Save code when edited
+  editor.onDidChangeModelContent(() => {
+    localStorage.setItem(CODE_KEY, editor.getValue());
+  });
+
+  // ✅ Load from storage when Monaco is ready
+  const savedCode = localStorage.getItem(CODE_KEY);
+  if (savedCode) {
+    editor.setValue(savedCode);
+  }
+});
+
+const CODE_KEY = "user_code";
+const TEST_CASES_KEY = "user_test_cases";
+
+console.log("Welcome to the C Compiler!");
+console.log(
+  "check out this video\n" + "https://youtu.be/xvFZjo5PgG0?si=clWUnz4alL4vx7uY"
+);
+
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const code = editor.getValue();
+
+  let filename = prompt("Enter filename (without extension):", "main");
+  if (!filename) return; // Cancelled
+
+  filename = filename.trim();
+  if (!filename.endsWith(".c")) filename += ".c";
+
+  const blob = new Blob([code], { type: "text/x-csrc" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+
+  URL.revokeObjectURL(url);
 });
 
 document
   .getElementById("addTestCaseBtn")
-  .addEventListener("click", addTestCase);
+  .addEventListener("click", () => addTestCase());
 document.getElementById("runBtn").addEventListener("click", compileCode);
 document.getElementById("testClassBtn").addEventListener("click", () => {
   switchTab("test-cases-section");
@@ -61,12 +100,43 @@ function addTestCase(input = "", expected = "") {
   const container = document.getElementById("test-cases");
   const div = document.createElement("div");
   const testCaseCount = container.children.length + 1;
+
+  div.classList.add("test-case"); // ✅ For consistent styling
   div.innerHTML = `
-                <div class="test-case-label">Test Case ${testCaseCount}</div>
-                <textarea placeholder="Input">${input}</textarea>
-                <textarea placeholder="Expected Output">${expected}</textarea>
-              `;
+    <div class="test-case-label">Test Case ${testCaseCount}</div>
+    <textarea placeholder="Input">${input}</textarea>
+    <textarea style="min-height:100px;" placeholder="Expected Output">${expected}</textarea>
+   <button class="remove" style="
+   width: auto;
+  top: 8px;
+  right: 8px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  margin-left: auto;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+">
+  ❌ remove testcase
+</button>
+
+  `;
+
+  const [inputArea, expectedArea] = div.querySelectorAll("textarea");
+  const removeBtn = div.querySelector(".remove");
+
+  inputArea.oninput = saveTestCasesToStorage; // ✅ Save on change
+  expectedArea.oninput = saveTestCasesToStorage;
+
+  removeBtn.onclick = () => {
+    div.remove();
+    saveTestCasesToStorage(); // ✅ Save after removal
+  };
+
   container.appendChild(div);
+  saveTestCasesToStorage(); // ✅ Save after adding
 }
 
 function getTestCases() {
@@ -83,6 +153,14 @@ function getTestCases() {
   });
 }
 
+function saveTestCasesToStorage() {
+  const testCases = getTestCases().map((tc) => ({
+    input: tc.input,
+    expected: tc.expected,
+  }));
+  localStorage.setItem(TEST_CASES_KEY, JSON.stringify(testCases));
+}
+
 function addPrintfAfterScanf(code) {
   const lines = code.split("\n");
   const updatedLines = [];
@@ -94,10 +172,10 @@ function addPrintfAfterScanf(code) {
 
     const match = lines[i].match(scanfRegex);
     if (match) {
-      const formatString = match[1]; // e.g., "%d %f %s"
-      const args = match[2] // e.g., "&x, &y, name"
+      const formatString = match[1];
+      const args = match[2]
         .split(",")
-        .map((arg) => arg.trim().replace(/^&/, "")); // remove leading &
+        .map((arg) => arg.trim().replace(/^&/, ""));
 
       const specifiers = [...formatString.matchAll(/%[a-zA-Z]/g)].map(
         (m) => m[0]
@@ -110,7 +188,7 @@ function addPrintfAfterScanf(code) {
               if (spec === "%c") return "%c";
               if (spec === "%s") return "%s";
               if (spec === "%f" || spec === "%lf") return "%f";
-              return "%d"; // default fallback for %d, %u, %ld, etc.
+              return "%d";
             })
             .join(" ") + "\\n";
 
@@ -177,8 +255,17 @@ async function compileCode() {
 }
 
 window.onload = () => {
-  addTestCase("Alice", "Hello Alice, ready to code in C??");
+  // Test cases load
+  const savedTestCases = JSON.parse(
+    localStorage.getItem(TEST_CASES_KEY) || "[]"
+  );
+  if (savedTestCases.length > 0) {
+    savedTestCases.forEach((tc) => addTestCase(tc.input, tc.expected));
+  } else {
+    addTestCase("Alice", "Hello Alice, ready to code in C??");
+  }
 
+  // Editor resizer
   const resizer = document.getElementById("resizer");
   const editorContainer = document.getElementById("editor-container");
 
