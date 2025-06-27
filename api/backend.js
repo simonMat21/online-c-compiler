@@ -5,14 +5,48 @@ async function compileCode(code, testCases) {
     const { input, expected, element } = testCases[i];
 
     try {
+      // const response = await fetch(process.env.COMPILER_API, {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ code, input }),
+      // });
       const response = await fetch(process.env.COMPILER_API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, input }),
+        body: JSON.stringify({
+          name: "C",
+          title: "43nzrzunz",
+          version: "latest",
+          mode: "c_cpp",
+          description: null,
+          extension: "c",
+          languageType: "programming",
+          active: true,
+          properties: {
+            language: "c",
+            docs: true,
+            tutorials: true,
+            cheatsheets: true,
+            filesEditable: true,
+            filesDeletable: true,
+            files: [
+              {
+                name: "Main.c",
+                content: code,
+              },
+            ],
+
+            stdin: input,
+          },
+          language: "c",
+          visibility: "public",
+          _id: "43nzrzunz",
+          user: null,
+        }),
       });
 
       const result = await response.json();
-      const actual = result.output || result.error || "No output";
+      const actual = result.stdout || result.error || "No output";
       const passed = actual.trim() === expected.trim();
       resultList.push(passed);
       const statusClass = passed ? "result-passed" : "result-failed";
