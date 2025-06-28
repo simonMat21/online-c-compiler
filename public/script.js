@@ -161,6 +161,16 @@ function saveTestCasesToStorage() {
   localStorage.setItem(TEST_CASES_KEY, JSON.stringify(testCases));
 }
 
+function removeCComments(code) {
+  return (
+    code
+      // Remove all multi-line comments
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      // Remove all single-line comments
+      .replace(/\/\/.*$/gm, "")
+  );
+}
+
 function addPrintfAfterScanf(code) {
   const lines = code.split("\n");
   const updatedLines = [];
@@ -168,23 +178,9 @@ function addPrintfAfterScanf(code) {
   const scanfRegex = /scanf\s*\(\s*"([^"]+)"\s*,\s*([^)]+)\)/;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+    updatedLines.push(lines[i]);
 
-    // Ignore lines that are fully commented out or contain scanf only after //
-    const commentIndex = line.indexOf("//");
-    const scanfIndex = line.indexOf("scanf");
-
-    if (
-      commentIndex !== -1 &&
-      (scanfIndex === -1 || scanfIndex > commentIndex)
-    ) {
-      updatedLines.push(line);
-      continue;
-    }
-
-    updatedLines.push(line);
-
-    const match = line.match(scanfRegex);
+    const match = lines[i].match(scanfRegex);
     if (match) {
       const formatString = match[1];
       const args = match[2]
@@ -240,8 +236,8 @@ function lineBreakAfterScanf(code) {
 
 async function compileCode() {
   const code = document.getElementById("subscribeCheckbox").checked
-    ? addPrintfAfterScanf(editor.getValue())
-    : lineBreakAfterScanf(editor.getValue());
+    ? addPrintfAfterScanf(removeCComments(editor.getValue()))
+    : lineBreakAfterScanf(removeCComments(editor.getValue()));
 
   const testCases = getTestCases();
 
