@@ -168,9 +168,23 @@ function addPrintfAfterScanf(code) {
   const scanfRegex = /scanf\s*\(\s*"([^"]+)"\s*,\s*([^)]+)\)/;
 
   for (let i = 0; i < lines.length; i++) {
-    updatedLines.push(lines[i]);
+    const line = lines[i];
 
-    const match = lines[i].match(scanfRegex);
+    // Ignore lines that are fully commented out or contain scanf only after //
+    const commentIndex = line.indexOf("//");
+    const scanfIndex = line.indexOf("scanf");
+
+    if (
+      commentIndex !== -1 &&
+      (scanfIndex === -1 || scanfIndex > commentIndex)
+    ) {
+      updatedLines.push(line);
+      continue;
+    }
+
+    updatedLines.push(line);
+
+    const match = line.match(scanfRegex);
     if (match) {
       const formatString = match[1];
       const args = match[2]
