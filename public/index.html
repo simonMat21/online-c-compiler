@@ -50,6 +50,9 @@
               Test Cases
             </button>
             <button id="outputBtn" data-tab="output-section">Output</button>
+            <button id="terminalBtn" data-tab="terminal-section">
+              Terminal
+            </button>
           </div>
           <div id="test-cases-section" class="active">
             <div id="test-cases"></div>
@@ -61,6 +64,20 @@
               should output include input value
             </label>
             <pre id="output">Output will appear here...</pre>
+          </div>
+          <div id="terminal-section">
+            <div id="terminal-container">
+              <div id="terminal-output"></div>
+              <div id="terminal-input-line">
+                <span class="terminal-prompt">user@c-compiler:~$ </span>
+                <input
+                  type="text"
+                  id="terminal-input"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
